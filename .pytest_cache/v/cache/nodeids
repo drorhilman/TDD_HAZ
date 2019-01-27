@@ -1,0 +1,8 @@
+[
+  "tests/test_functions.py::test_list_files_from_dir",
+  "tests/test_functions.py::test_api_list_files_from_paths",
+  "tests/test_functions.py::test_user_clicked_on_image",
+  "tests/test_functions.py::test_javascript_object_with_the_right_list",
+  "tests/test_functions.py::test_browser_visual_view",
+  "tests/test_functions.py::test_download_traits"
+]

@@ -1,4 +1,4 @@
-from app import list_files_from_dir
+from app import list_files_from_dir, download_traits
 import os
 import requests
 
@@ -9,6 +9,7 @@ from selenium import webdriver
 
 PATH = 'images/'
 ADDRESS = 'http://localhost:5000'
+LONG_RUN = True
 sample_image = 'images/2318-4-4(1).JPG'
 
 @contextmanager
@@ -97,6 +98,7 @@ def compare_files(f1, f2):
             assert file1.read() == file2.read()
 
 def test_browser_visual_view(driver_fixure):
+    import time
     driver = driver_fixure
     
     
@@ -105,7 +107,7 @@ def test_browser_visual_view(driver_fixure):
     img_link.click()
     f1 = 'tests/screen1.png'
     f2 = 'tests/test_screen1.png'
-    
+    time.sleep(2)
     if not os.path.isfile(f1):
         driver.save_screenshot(f1)
     
@@ -113,8 +115,17 @@ def test_browser_visual_view(driver_fixure):
     driver.save_screenshot(f2)
     compare_files(f1, f2)
     
-
-
-
-    
-    
+#============================================
+# Test data download
+@pytest.mark.skipif(LONG_RUN == False, reason="skip long runs")
+def test_download_traits():
+    import pandas as pd
+    #use cache...
+    df1 = download_traits()
+    data = pd.read_csv('trait_onthology.csv')
+    assert str(df1.values) == str(data.values)
+    #test data download 
+    df2 = download_traits(use_cache=False)
+    assert str(df1.values) == str(df2.values)
+    assert df1.columns.all(df2.columns)
+    assert 'name' in df2.columns
